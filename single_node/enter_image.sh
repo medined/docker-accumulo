@@ -13,6 +13,6 @@ then
   usage
 fi
 
-ACCUMULO_PID=$(docker inspect --format {{.State.Pid}} $IMAGENAME)
+ACCUMULO_PID=$(DOCKER_HOST=$DOCKER_HOST docker inspect --format {{.State.Pid}} $IMAGENAME)
 sudo nsenter --target $ACCUMULO_PID --mount --uts --ipc --net --pid
 

@@ -13,7 +13,7 @@ then
   usage
 fi
 
-sudo docker stop $IMAGENAME || :
+sudo DOCKER_HOST=$DOCKER_HOST docker stop $IMAGENAME || :
 sleep 2
-sudo docker rm $IMAGENAME || :
+sudo DOCKER_HOST=$DOCKER_HOST docker rm $IMAGENAME || :
 
