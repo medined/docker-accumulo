@@ -20,4 +20,4 @@ then
   usage
 fi
 
-sudo DOCKER_HOST=$DOCKER_HOST docker run -d --name=$IMAGENAME -h=$HOSTNAME -P medined/accumulo /run.sh $HOSTNAME
+sudo DOCKER_HOST=$DOCKER_HOST docker run -d --name=$IMAGENAME -h=$HOSTNAME -P medined/accumulo /docker/run.sh $HOSTNAME

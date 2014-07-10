@@ -29,4 +29,3 @@ RUN cp -vr /docker/accumulo.conf/* /etc/accumulo/conf/; \
 
 EXPOSE 22 2181 8020 8025 8030 8050 8088 8141 10020 19888 50070 50090 50095
 
-ADD run.sh /
