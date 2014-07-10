@@ -2,18 +2,26 @@
 
 This project provides a single-node Accumulo instance. It is based on the work at https://github.com/sroegner/docker-builds.
 
-You can spinup as many Accumulo instances as you'd like and they'd run side-by-side. On my laptop each instance takes about 250 milliseconds to start.
+You can spinup as many Accumulo instances as you'd like and they'd run side-by-side. On my laptop each instance takes about 250 milliseconds to start but about 3 seconds for the processes to connect to each other.
+
+## Preparation
+
+There are two ways to communicate with the Docker daemon. You can use a UNIX socket or a port. If you use a port, then specify it with all of the commands below. Alternatively you can set DOCKEROPTS like this:
+
+```
+export DOCKEROPTS="-H :4243"
+```
 
 ## Build Image
 
 ```
-./make_image.sh
+./make_image.sh [docker port]
 ```
 
 ## Run Image
 
 ```
-./make_container.sh [host name] [image name]
+./make_container.sh [host name] [image name] [docker port]
 ```
 
 You must specify a host name and an image name when you start an Accumulo container. Doing some allows you to start more than one Accumulo container at the same time.
@@ -21,7 +29,7 @@ You must specify a host name and an image name when you start an Accumulo contai
 ## Clean Image
 
 ```
-./make_clean.sh [image name]
+./make_clean.sh [image name] [docker port]
 ```
 
 This script just wraps the 'docker stop' and 'docker rm' commands. 

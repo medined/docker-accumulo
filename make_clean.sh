@@ -1,9 +1,10 @@
 #!/bin/bash
 
 IMAGENAME=$1
+DOCKERPORT=$2
 
 usage() {
-  echo "Usage: $0 [image name]"
+  echo "Usage: $0 [image name] [docker port]"
   exit 1
 }
 
@@ -13,7 +14,14 @@ then
   usage
 fi
 
-sudo docker stop $IMAGENAME || :
+DOCKEROPTS="$DOCKEROPTS"
+
+if [ ! -z $DOCKERPORT ]
+then
+  DOCKEROPTS="-H :$DOCKERPORT"
+fi
+
+sudo docker $DOCKEROPTS stop $IMAGENAME || :
 sleep 2
-sudo docker rm $IMAGENAME || :
+sudo docker $DOCKEROPTS rm $IMAGENAME || :
 

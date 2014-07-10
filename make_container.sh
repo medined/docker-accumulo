@@ -2,9 +2,10 @@
 
 HOSTNAME=$1
 IMAGENAME=$2
+DOCKERPORT=$3
 
 usage() {
-  echo "Usage: $0 [host name] [image name]"
+  echo "Usage: $0 [host name] [image name] [docker port]"
   exit 1
 }
 
@@ -20,4 +21,12 @@ then
   usage
 fi
 
-sudo docker run -d --name=$IMAGENAME -h=$HOSTNAME -P medined/accumulo /run.sh $HOSTNAME
+DOCKEROPTS="$DOCKEROPTS"
+
+if [ ! -z $DOCKERPORT ]
+then
+  DOCKEROPTS="-H :$DOCKERPORT"
+fi
+
+sudo docker $DOCKEROPTS run -d --name=$IMAGENAME -h=$HOSTNAME -P medined/accumulo /run.sh $HOSTNAME
+

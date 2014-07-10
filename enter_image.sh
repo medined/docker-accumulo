@@ -1,9 +1,10 @@
 #!/bin/bash
 
 IMAGENAME=$1
+DOCKERPORT=$2
 
 usage() {
-  echo "Usage: $0 [image name]"
+  echo "Usage: $0 [image name] [docker port]"
   exit 1
 }
 
@@ -13,7 +14,13 @@ then
   usage
 fi
 
+DOCKEROPTS="$DOCKEROPTS"
 
-ACCUMULO_PID=$(docker inspect --format {{.State.Pid}} $IMAGENAME)
+if [ ! -z $DOCKERPORT ]
+then
+  DOCKEROPTS="-H :$DOCKERPORT"
+fi
+
+ACCUMULO_PID=$(docker $DOCKEROPTS inspect --format {{.State.Pid}} $IMAGENAME)
 sudo nsenter --target $ACCUMULO_PID --mount --uts --ipc --net --pid
 
