@@ -13,9 +13,6 @@ then
   usage
 fi
 
-# Update Supervisor configuration
-sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/supervisor/conf.d/accumulo.conf
-
 # Update Hadoop configurations
 sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/hadoop/conf/core-site.xml
 sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/hadoop/conf/hdfs-site.xml
@@ -23,6 +20,9 @@ sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/hadoop/conf/mapred-site.xml
 sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/hadoop/conf/yarn-site.xml
 echo $HOSTNAME > /etc/hadoop/conf/masters
 echo $HOSTNAME > /etc/hadoop/conf/slaves
+
+# Update Supervisor configuration
+sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/supervisor/conf.d/accumulo.conf
 
 # Update Accumulo configurations
 sed -i "s/MYHOSTNAME/$HOSTNAME/" /etc/accumulo/conf/accumulo-site.xml
