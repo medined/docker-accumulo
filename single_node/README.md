@@ -1,8 +1,15 @@
 # Accumulo in Docker
 
-This project provides a single-node Accumulo instance. It is based on the work at https://github.com/sroegner/docker-builds.
+This project provides a single-node Accumulo instance. It is based on the work at 
+https://github.com/sroegner/docker-builds.
 
-You can spinup as many Accumulo instances as you'd like and they'd run side-by-side. On my laptop each instance takes about 250 milliseconds to start but about 3 seconds for the processes to connect to each other.
+You can spinup as many Accumulo instances as you'd like and they'd run side-by-side. 
+On my laptop each instance takes about 250 milliseconds to start but about 3 seconds 
+for the processes to connect to each other.
+
+As of July 11, each Accumulo container gets it own bridge network. This paves
+the way for creating a multi-node Accumulo system. Each set of Docker containers
+would communicate across its own bridge.
 
 ## Preparation
 
@@ -21,10 +28,29 @@ export DOCKER_HOST="tcp://0.0.0.0:4243"
 ## Run Image
 
 ```
-./make_container.sh [host name] [image name]
+./make_container.sh [host name] [image name] [[brige name] [Class C subnet]
 ```
 
-You must specify a host name and an image name when you start an Accumulo container. Doing some allows you to start more than one Accumulo container at the same time.
+Note that a bridge name must begin with "br". For example,
+
+```
+./make_container.sh grail grail brgrail 10.0.10
+```
+
+You can see the bridge network from within the container. It looks like this:
+
+```
+$ ./enter_image.sh grail
+# ifconfig eth1
+eth1      Link encap:Ethernet  HWaddr 9A:C0:FD:22:9E:A6  
+          inet addr:10.0.10.1  Bcast:0.0.0.0  Mask:255.255.255.0
+          inet6 addr: fe80::98c0:fdff:fe22:9ea6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:251 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:9 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:46809 (45.7 KiB)  TX bytes:690 (690.0 b)
+```
 
 ## Clean Image
 
