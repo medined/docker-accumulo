@@ -80,6 +80,14 @@ export HADOOPHOST=10.0.10.1
 Use './enter_image grailedge' in order to access a BASH shell and perform commands
 on the edge node.
 
+## Removing Bridge Networks
+
+```
+export BRIDGENAME=brgrail
+sudo ip link set $BRIDGENAME down
+sudo brctl delbr $BRIDGENAME
+```
+
 ## Clean Image
 
 ```
