@@ -28,16 +28,17 @@ export DOCKER_HOST="tcp://0.0.0.0:4243"
 ## Run Image
 
 ```
-./make_container.sh [host name] [image name] [[brige name] [Class C subnet]
+export HOSTNAME=grail
+export IMAGENAME=grail
+export BRIDGENAME=brgrail
+export SUBNET=10.0.10
+export NODEID=1
+export HADOOPHOST=10.0.10.1
+./make_container.sh $HOSTNAME $IMAGENAME $BRIDGENAME $SUBNET $NODEID $HADOOPHOST yes
 ```
 
-Note that a bridge name must begin with "br". For example,
-
-```
-./make_container.sh grail grail brgrail 10.0.10
-```
-
-You can see the bridge network from within the container. It looks like this:
+Note that a bridge name must begin with "br".  You can see the bridge network from 
+within the container. It looks like this:
 
 ```
 $ ./enter_image.sh grail
@@ -51,6 +52,33 @@ eth1      Link encap:Ethernet  HWaddr 9A:C0:FD:22:9E:A6
           collisions:0 txqueuelen:1000 
           RX bytes:46809 (45.7 KiB)  TX bytes:690 (690.0 b)
 ```
+
+## Running an Edge Node
+
+An edge node can access Zookeeper, Hadoop and Accumulo without running any
+of the processes. Therefore, more memory can be given to client programs.
+The edge node uses the same image as before, except that the supervisor
+configuration files are deleted.
+
+Notice below, that the IP address of the single-node Accumulo server
+is used instead of the hostname. This is important because we are not
+updating the /etc/hosts file or using DNS to resolve host names.
+
+Also notice the last parameter is "no" which tells run.sh to delete the
+supervisor configuration files.
+
+```
+export HOSTNAME=grailedge
+export IMAGENAME=grailedge
+export BRIDGENAME=brgrail
+export SUBNET=10.0.10
+export NODEID=2
+export HADOOPHOST=10.0.10.1
+./make_container.sh $HOSTNAME $IMAGENAME $BRIDGENAME $SUBNET $NODEID $HADOOPHOST no
+```
+
+Use './enter_image grailedge' in order to access a BASH shell and perform commands
+on the edge node.
 
 ## Clean Image
 

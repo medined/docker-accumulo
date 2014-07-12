@@ -4,9 +4,12 @@ HOSTNAME=$1
 IMAGENAME=$2
 BRIDGENAME=$3
 SUBNET=$4
+NODEID=$5
+HADOOPHOST=$6
+SUPERVISOR=$7
 
 usage() {
-  echo "Usage: $0 [host name] [image name] [bridge name] [class c subnet]"
+  echo "Usage: $0 [host name] [image name] [bridge name] [class c subnet] [hadoop host] [yes=supervisor]"
   exit 1
 }
 
@@ -34,10 +37,40 @@ then
   usage
 fi
 
-IPADDR="${SUBNET}.1"
+if [ -z $NODEID ]
+then
+  echo "Error: missing Node ID parameter. Should be number from 1 to 253."
+  usage
+fi
+
+if [ -z $HADOOPHOST ]
+then
+  echo "Error: missing Hadoop Host parameter. Should be IP Address."
+  usage
+fi
+
+if [ -z $SUPERVISOR ]
+then
+  echo "Error: missing Supervisor parameter. Must be yes or no."
+  usage
+fi
+
+IPADDR="${SUBNET}.${NODEID}"
 CIDR=24
 
-sudo DOCKER_HOST=$DOCKER_HOST docker run -d --name=$IMAGENAME -h=$HOSTNAME -P medined/accumulo /docker/run.sh $IMAGENAME $HOSTNAME $BRIDGENAME $IPADDR $CIDR
+sudo DOCKER_HOST=$DOCKER_HOST docker run -d --name=$IMAGENAME -h=$HOSTNAME -P medined/accumulo /docker/run.sh $IMAGENAME $HOSTNAME $BRIDGENAME $IPADDR $CIDR $HADOOPHOST $SUPERVISOR
 
 sudo DOCKER_HOST=$DOCKER_HOST ./pipework $BRIDGENAME $IMAGENAME "$IPADDR/$CIDR"
-sudo ifconfig $BRIDGENAME "${SUBNET}.254"
+
+#####
+# Create bridge if needed.
+##
+BRIDGEP=$(brctl show $BRIDGENAME | grep "No such device")
+if [ $BRIDGEP ]
+then
+  echo "Creating Bridge $BRIDGENAME"
+  sudo ifconfig $BRIDGENAME "${SUBNET}.254"
+else
+  echo "Using bridge $BRIDGENAME"
+fi
+
