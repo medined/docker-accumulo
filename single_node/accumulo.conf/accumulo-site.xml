@@ -24,6 +24,10 @@
         <value>MYHOSTNAME:2181</value>
         <description>comma separated list of zookeeper servers</description>
     </property>
+    <property>
+      <name>instance.volumes</name>
+      <value>hdfs://MYHOSTNAME/accumulo</value>
+    </property>
 
     <property>
         <name>logger.dir.walog</name>
@@ -50,17 +54,17 @@
     <!-- profile 3GB -->
     <property>
         <name>tserver.cache.index.size</name>
-        <value>128M</value>
+        <value>5M</value>
     </property>
 
     <property>
         <name>tserver.memory.maps.max</name>
-        <value>1G</value>
+        <value>5M</value>
     </property>
 
     <property>
         <name>tserver.cache.data.size</name>
-        <value>128M</value>
+        <value>5M</value>
     </property>
 
     <property>
