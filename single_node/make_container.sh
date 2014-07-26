@@ -9,7 +9,7 @@ HADOOPHOST=$6
 SUPERVISOR=$7
 
 usage() {
-  echo "Usage: $0 [host name] [image name] [bridge name] [class c subnet] [hadoop host] [yes=supervisor]"
+  echo "Usage: $0 [host name] [image name] [bridge name] [class c subnet] [node id] [hadoop host] [yes=supervisor]"
   exit 1
 }
 
