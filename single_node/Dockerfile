@@ -28,5 +28,11 @@ RUN cp -vr /docker/accumulo.conf/* /etc/accumulo/conf/; \
     cp -vr /docker/dotssh/* /home/accumulo/.ssh/ ;\
     chown -R accumulo.accumulo /home/accumulo/.ssh
 
+RUN wget  –quiet http://mirror.reverse.net/pub/apache/pig/pig-0.13.0/pig-0.13.0.tar.gz && \
+  cd /usr/lib && \
+  tar xfz /pig-0.13.0.tar.gz && \
+  ln -s /usr/lib/pig-0.13.0 /usr/lib/pig && \
+  cp /docker/pig_profile.sh /etc/profile.d/pig_profile.sh;
+
 EXPOSE 22 2181 8020 8025 8030 8050 8088 8141 10020 19888 50070 50090 50095
 
