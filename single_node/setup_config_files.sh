@@ -36,3 +36,5 @@ echo $HOSTNAME > /etc/accumulo/conf/monitor
 echo $HOSTNAME > /etc/accumulo/conf/slaves
 echo $HOSTNAME > /etc/accumulo/conf/tracers
 
+# Update HOSTS file
+sed -i "s/$HOSTNAME/$HOMENAME MYHOSTNAME/" /etc/hosts
