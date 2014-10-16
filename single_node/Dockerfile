@@ -1,8 +1,8 @@
 FROM sroegner/doop
 
-RUN curl -L http://apache.osuosl.org/accumulo/1.5.1/accumulo-1.5.1-bin.tar.gz -o /tmp/acc.tgz && \
+RUN curl -L http://apache.osuosl.org/accumulo/1.5.2/accumulo-1.5.2-bin.tar.gz -o /tmp/acc.tgz && \
     tar xzf /tmp/acc.tgz -C /usr/lib && rm -vf /tmp/acc.tgz && id 
-RUN ln -s /usr/lib/accumulo-1.5.1 /usr/lib/accumulo; \
+RUN ln -s /usr/lib/accumulo-1.5.2 /usr/lib/accumulo; \
     mkdir -p /etc/accumulo/conf /var/run/accumulo /var/lib/accumulo /var/log/accumulo; \
     useradd -u 6040 -G hadoop accumulo; \
     chown accumulo.accumulo /var/run/accumulo /var/lib/accumulo /var/log/accumulo; \
@@ -25,7 +25,10 @@ RUN cp -vr /docker/accumulo.conf/* /etc/accumulo/conf/; \
     chmod 700 /root/.ssh /home/accumulo/.ssh; \
     cp -vr /docker/dotssh/* /root/.ssh/; \
     cp -vr /docker/dotssh/* /home/accumulo/.ssh/ ;\
-    chown -R accumulo.accumulo /home/accumulo/.ssh
+    chown -R accumulo.accumulo /home/accumulo/.ssh;\
+    sed -i 's/\/usr\/lib\/hadoop\/bin\/hdfs//\/usr\/lib\/hadoop-hdfs\/bin\/hdfs/g' /docker/init_accumulo.sh;\
+    cp -r /usr/lib/hadoop/libexec/ /usr/lib/hadoop-hdfs/;\
+    echo "export JAVA_HOME=/usr/lib/jvm/java/" >> /usr/lib/hadoop/etc/hadoop/hadoop-env.sh
 
 EXPOSE 22 2181 8020 8025 8030 8050 8088 8141 10020 19888 50070 50090 50095
 
